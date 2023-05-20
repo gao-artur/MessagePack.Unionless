@@ -1,7 +1,7 @@
-﻿using System.Collections.Concurrent;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using MessagePack.Formatters;
+using MessagePack.Unionless.Internal;
 
 namespace MessagePack.Unionless;
 
@@ -70,8 +70,8 @@ public abstract class EventsFormatter
     private delegate void SerializeMethod(object formatter, ref MessagePackWriter writer, object value, MessagePackSerializerOptions options);
     private delegate object DeserializeMethod(object formatter, ref MessagePackReader reader, MessagePackSerializerOptions options);
 
-    private static readonly ConcurrentDictionary<Type, SerializeMethod> Serializers = new();
-    private static readonly ConcurrentDictionary<Type, DeserializeMethod> Deserializers = new();
+    private static readonly ThreadsafeTypeKeyHashTable<SerializeMethod> Serializers = new();
+    private static readonly ThreadsafeTypeKeyHashTable<DeserializeMethod> Deserializers = new();
 
     protected static void SerializeInternal<T>(Type type, ref MessagePackWriter writer, T value, MessagePackSerializerOptions options)
     {
