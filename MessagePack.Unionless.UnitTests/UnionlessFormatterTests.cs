@@ -62,6 +62,57 @@ public class UnionlessFormatterTests
         Assert.AreEqual(before.SubUnionType2Prop, after.SubUnionType2Prop);
     }
 
+    [TestMethod]
+    [DataRow(nameof(TypeIdTypeHeaderFormatter))]
+    [DataRow(nameof(TypeNameTypeHeaderFormatter))]
+    public void TestUnionHeaderFormatters_Collection(string headerFormatterName)
+    {
+        var headerFormatter = GetTypeHeaderFormatter(headerFormatterName);
+        var options = GetOptions(headerFormatter);
+
+        var firstBefore = new SubUnionClass
+        {
+            BaseProp = $"Base of {nameof(SubUnionClass)}",
+            SubUnionType1Prop = nameof(SubUnionClass)
+        };
+
+        var secondBefore = new SubUnionStruct
+        {
+            BaseProp = $"Base of {nameof(SubUnionStruct)}",
+            SubUnionType2Prop = nameof(SubUnionStruct)
+        };
+
+        var before = new IMyBaseType[]
+        {
+            firstBefore,
+            secondBefore
+        };
+
+        var bin = MessagePackSerializer.Serialize(before, options);
+
+        var debugJson = MessagePackSerializer.ConvertToJson(bin);
+        Trace.WriteLine(debugJson);
+
+        var deserialized = MessagePackSerializer.Deserialize<IMyBaseType[]>(bin, options);
+
+        Assert.IsNotNull(deserialized);
+        Assert.AreEqual(2, deserialized.Length);
+
+        var first = deserialized[0];
+        Assert.IsInstanceOfType<SubUnionClass>(first);
+        var firstAfter = (SubUnionClass)first;
+
+        Assert.AreEqual(firstBefore.BaseProp, firstAfter.BaseProp);
+        Assert.AreEqual(firstBefore.SubUnionType1Prop, firstAfter.SubUnionType1Prop);
+
+        var second = deserialized[1];
+        Assert.IsInstanceOfType<SubUnionStruct>(second);
+        var secondAfter = (SubUnionStruct)second;
+
+        Assert.AreEqual(secondBefore.BaseProp, secondAfter.BaseProp);
+        Assert.AreEqual(secondBefore.SubUnionType2Prop, secondAfter.SubUnionType2Prop);
+    }
+
     private static MessagePackSerializerOptions GetOptions(ITypeHeaderFormatter headerFormatter)
     {
         var resolver = CompositeResolver.Create(
