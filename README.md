@@ -107,16 +107,6 @@ BenchmarkDotNet=v0.13.5, OS=Windows 10 (10.0.19045.2965/22H2/2022Update)
 .NET SDK=7.0.302
   [Host]     : .NET 7.0.5 (7.0.523.17405), X64 RyuJIT AVX2
   DefaultJob : .NET 7.0.5 (7.0.523.17405), X64 RyuJIT AVX2
-
-
 ```
 
-|              Method |  Categories |       Mean |    Error |   StdDev | Ratio | RatioSD |   Gen0 | Allocated | Alloc Ratio |
-|-------------------- |------------ |-----------:|---------:|---------:|------:|--------:|-------:|----------:|------------:|
-|    DeserializeUnion | Deserialize | 1,228.5 ns | 10.49 ns |  9.82 ns |  1.00 |    0.00 | 0.1278 |    1616 B |        1.00 |
-|   DeserializeTypeId | Deserialize | 1,621.6 ns |  5.00 ns |  4.17 ns |  1.32 |    0.01 | 0.1278 |    1616 B |        1.00 |
-| DeserializeTypeName | Deserialize | 1,958.5 ns | 18.25 ns | 16.18 ns |  1.60 |    0.02 | 0.1259 |    1616 B |        1.00 |
-|                     |             |            |          |          |       |         |        |           |             |
-|      SerializeUnion |   Serialize |   914.8 ns |  3.69 ns |  3.08 ns |  1.00 |    0.00 | 0.0477 |     600 B |        1.00 |
-|     SerializeTypeId |   Serialize | 1,140.2 ns |  3.16 ns |  2.80 ns |  1.25 |    0.00 | 0.0477 |     600 B |        1.00 |
-|   SerializeTypeName |   Serialize | 1,121.1 ns |  7.38 ns |  6.16 ns |  1.23 |    0.01 | 0.0687 |     872 B |        1.45 |
+![Benchmark results](/Images/Benchmark.png)
