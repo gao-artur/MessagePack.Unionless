@@ -22,7 +22,4 @@ public static class EventsTypeMap
         [typeof(RiskDismissedEvent)] = 2,
         [typeof(RiskSynchedEvent)] = 3
     };
-
-    public static IReadOnlyDictionary<int, Type> IdToTypeMap { get; } =
-        TypeToIdMap.ToDictionary(kv => kv.Value, kv => kv.Key);
 }

@@ -14,10 +14,10 @@ public class UnionlessFormatterTests
         var headerFormatter = GetTypeHeaderFormatter(headerFormatterName);
         var options = GetOptions(headerFormatter);
 
-        var before = new SubUnionClass
+        var before = new DerivedClass
         {
-            BaseProp = $"Base of {nameof(SubUnionClass)}",
-            SubUnionType1Prop = nameof(SubUnionClass)
+            BaseProp = $"Base of {nameof(DerivedClass)}",
+            DerivedTypeProp = nameof(DerivedClass)
         };
 
         var bin = MessagePackSerializer.Serialize<IMyBaseType>(before, options);
@@ -27,11 +27,11 @@ public class UnionlessFormatterTests
 
         var deserialized = MessagePackSerializer.Deserialize<IMyBaseType>(bin, options);
 
-        Assert.IsInstanceOfType<SubUnionClass>(deserialized);
-        var after = (SubUnionClass)deserialized;
+        Assert.IsInstanceOfType<DerivedClass>(deserialized);
+        var after = (DerivedClass)deserialized;
 
         Assert.AreEqual(before.BaseProp, after.BaseProp);
-        Assert.AreEqual(before.SubUnionType1Prop, after.SubUnionType1Prop);
+        Assert.AreEqual(before.DerivedTypeProp, after.DerivedTypeProp);
     }
 
     [TestMethod]
@@ -42,10 +42,10 @@ public class UnionlessFormatterTests
         var headerFormatter = GetTypeHeaderFormatter(headerFormatterName);
         var options = GetOptions(headerFormatter);
 
-        var before = new SubUnionStruct
+        var before = new DerivedStruct
         {
-            BaseProp = $"Base of {nameof(SubUnionStruct)}",
-            SubUnionType2Prop = nameof(SubUnionStruct)
+            BaseProp = $"Base of {nameof(DerivedStruct)}",
+            DerivedStructProp = nameof(DerivedStruct)
         };
 
         var bin = MessagePackSerializer.Serialize<IMyBaseType>(before, options);
@@ -55,11 +55,11 @@ public class UnionlessFormatterTests
 
         var deserialized = MessagePackSerializer.Deserialize<IMyBaseType>(bin, options);
 
-        Assert.IsInstanceOfType<SubUnionStruct>(deserialized);
-        var after = (SubUnionStruct)deserialized;
+        Assert.IsInstanceOfType<DerivedStruct>(deserialized);
+        var after = (DerivedStruct)deserialized;
 
         Assert.AreEqual(before.BaseProp, after.BaseProp);
-        Assert.AreEqual(before.SubUnionType2Prop, after.SubUnionType2Prop);
+        Assert.AreEqual(before.DerivedStructProp, after.DerivedStructProp);
     }
 
     [TestMethod]
@@ -70,16 +70,16 @@ public class UnionlessFormatterTests
         var headerFormatter = GetTypeHeaderFormatter(headerFormatterName);
         var options = GetOptions(headerFormatter);
 
-        var firstBefore = new SubUnionClass
+        var firstBefore = new DerivedClass
         {
-            BaseProp = $"Base of {nameof(SubUnionClass)}",
-            SubUnionType1Prop = nameof(SubUnionClass)
+            BaseProp = $"Base of {nameof(DerivedClass)}",
+            DerivedTypeProp = nameof(DerivedClass)
         };
 
-        var secondBefore = new SubUnionStruct
+        var secondBefore = new DerivedStruct
         {
-            BaseProp = $"Base of {nameof(SubUnionStruct)}",
-            SubUnionType2Prop = nameof(SubUnionStruct)
+            BaseProp = $"Base of {nameof(DerivedStruct)}",
+            DerivedStructProp = nameof(DerivedStruct)
         };
 
         var before = new IMyBaseType[]
@@ -99,18 +99,18 @@ public class UnionlessFormatterTests
         Assert.AreEqual(2, deserialized.Length);
 
         var first = deserialized[0];
-        Assert.IsInstanceOfType<SubUnionClass>(first);
-        var firstAfter = (SubUnionClass)first;
+        Assert.IsInstanceOfType<DerivedClass>(first);
+        var firstAfter = (DerivedClass)first;
 
         Assert.AreEqual(firstBefore.BaseProp, firstAfter.BaseProp);
-        Assert.AreEqual(firstBefore.SubUnionType1Prop, firstAfter.SubUnionType1Prop);
+        Assert.AreEqual(firstBefore.DerivedTypeProp, firstAfter.DerivedTypeProp);
 
         var second = deserialized[1];
-        Assert.IsInstanceOfType<SubUnionStruct>(second);
-        var secondAfter = (SubUnionStruct)second;
+        Assert.IsInstanceOfType<DerivedStruct>(second);
+        var secondAfter = (DerivedStruct)second;
 
         Assert.AreEqual(secondBefore.BaseProp, secondAfter.BaseProp);
-        Assert.AreEqual(secondBefore.SubUnionType2Prop, secondAfter.SubUnionType2Prop);
+        Assert.AreEqual(secondBefore.DerivedStructProp, secondAfter.DerivedStructProp);
     }
 
     private static MessagePackSerializerOptions GetOptions(ITypeHeaderFormatter headerFormatter)
@@ -131,16 +131,14 @@ public class UnionlessFormatterTests
     {
         var typeToIdMap = new Dictionary<Type, int>
         {
-            [typeof(SubUnionClass)] = 0,
-            [typeof(SubUnionStruct)] = 1
+            [typeof(DerivedClass)] = 0,
+            [typeof(DerivedStruct)] = 1
         };
-
-        var idToTypeMap = typeToIdMap.ToDictionary(kv => kv.Value, kv => kv.Key);
 
         switch (typeName)
         {
             case nameof(TypeIdTypeHeaderFormatter):
-                return new TypeIdTypeHeaderFormatter(typeToIdMap, idToTypeMap);
+                return new TypeIdTypeHeaderFormatter(typeToIdMap);
             case nameof(TypeNameTypeHeaderFormatter):
                 return new TypeNameTypeHeaderFormatter();
             default:

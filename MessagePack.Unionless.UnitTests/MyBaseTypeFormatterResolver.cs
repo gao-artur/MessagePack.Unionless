@@ -30,18 +30,18 @@ public abstract class MyBaseType : IMyBaseType
 }
 
 [MessagePackObject]
-public class SubUnionClass : MyBaseType
+public class DerivedClass : MyBaseType
 {
     [Key(1)]
-    public string? SubUnionType1Prop { get; set; }
+    public string? DerivedTypeProp { get; set; }
 }
 
 [MessagePackObject]
-public struct SubUnionStruct : IMyBaseType
+public struct DerivedStruct : IMyBaseType
 {
     [Key(0)]
     public string? BaseProp { get; set; }
 
     [Key(1)]
-    public string? SubUnionType2Prop { get; set; }
+    public string? DerivedStructProp { get; set; }
 }

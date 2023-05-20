@@ -5,10 +5,10 @@ public class TypeIdTypeHeaderFormatter : ITypeHeaderFormatter
     private readonly IReadOnlyDictionary<Type, int> _typeToIdMap;
     private readonly IReadOnlyDictionary<int, Type> _idToTypeMap;
 
-    public TypeIdTypeHeaderFormatter(IReadOnlyDictionary<Type, int> typeToIdMap, IReadOnlyDictionary<int, Type> idToTypeMap)
+    public TypeIdTypeHeaderFormatter(IReadOnlyDictionary<Type, int> typeToIdMap)
     {
         _typeToIdMap = typeToIdMap;
-        _idToTypeMap = idToTypeMap;
+        _idToTypeMap = typeToIdMap.ToDictionary(kv => kv.Value, kv => kv.Key);
     }
 
     public void Write(ref MessagePackWriter writer, Type type, UnionlessMessagePackSerializerOptions options)

@@ -21,7 +21,7 @@ public class UnionSerializerBenchmark
                 StandardResolver.Instance))
             .WithOmitAssemblyVersion(true))
     {
-        TypeHeaderFormatter = new TypeIdTypeHeaderFormatter(EventsTypeMap.TypeToIdMap, EventsTypeMap.IdToTypeMap)
+        TypeHeaderFormatter = new TypeIdTypeHeaderFormatter(EventsTypeMap.TypeToIdMap)
     };
 
     private static readonly MessagePackSerializerOptions TypeNameOptions = new UnionlessMessagePackSerializerOptions(
